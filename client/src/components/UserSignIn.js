@@ -2,19 +2,16 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form'
 
-import { APIHelper } from '../APIHelper';
-const helper = new APIHelper();
-
 export default class UserSignIn extends Component {
   state = {
-    username: '',
+    emailAddress: '',
     password: '',
     errors: [],
   }
   
   render() {
     const {
-      username,
+      emailAddress,
       password,
       errors,
     } = this.state;
@@ -31,10 +28,10 @@ export default class UserSignIn extends Component {
             elements={() => (
               <React.Fragment>
                 <input 
-                  id="username"
-                  name="username"
+                  id="emailAddress"
+                  name="emailAddress"
                   type="text"
-                  value={username}
+                  value={emailAddress}
                   onChange={this.change}
                   placeholder="Username" />
                 <input 
@@ -65,17 +62,17 @@ export default class UserSignIn extends Component {
 
   submit = () => {
     // TODO - fix FROM
-    // const { from } = this.props.location.state || {from: {pathname: 'CHANGE ME'}}
-    const { username, password, } = this.state;
-    //Add context here
-    helper.getUser(username, password)
+    const { from } = this.props.location.state || {from: {pathname: '/'}}
+    const { emailAddress, password, } = this.state;
+    const { context } = this.props;
+    context.actions.signIn(emailAddress, password)
       .then( user => {
         if (user === null) {
           this.setState(() => {
             return { errors: ['Sign-in was unsuccessful'] };
           });
         } else {
-          // this.props.history.push(from);
+          this.props.history.push(from);
           console.log('Sign in successful!');
         }
       })

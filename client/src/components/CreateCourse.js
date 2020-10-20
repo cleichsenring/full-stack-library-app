@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import Form from './Form';
 
-import {APIHelper} from '../APIHelper';
-const helper = new APIHelper();
-
-
 export default class CreatCourse extends Component {
   state = {
     title: '',
@@ -13,6 +9,7 @@ export default class CreatCourse extends Component {
     materialsNeeded: '',
     errors: []
   }
+
   render() {
     const {
       title,
@@ -21,6 +18,7 @@ export default class CreatCourse extends Component {
       materialsNeeded,
       errors,
     } = this.state;
+    const authUser = this.props.context.authenticatedUser;
 
     return (
       <div className="bounds course--detail">
@@ -43,7 +41,7 @@ export default class CreatCourse extends Component {
                     onChange={this.change}
                     className="input-title course--title--input"
                   />
-                  <p>Signed In user first + last name go here</p>
+                  <p>By {authUser.firstName} {authUser.lastName}</p>
                 </div>
                 <div className="course--description">
                   <textarea 
@@ -105,17 +103,25 @@ export default class CreatCourse extends Component {
   }
 
   submit = () => {
-    // TODO finish course creation
-    const course = this.state;
-    // Context for user Auth needed 
-    const username = 'joe@smith.com"'
-    const password = 'joepassword'
-    helper.createCourse(course, username, password)
-      .then()
-      .catch(err => {
-        console.log(err);
-        this.props.history.push('/error')
-      })
+    
+    
+    const course = {
+      title: this.state.title,
+      description: this.state.description,
+      estimatedTime: this.state.estimatedTime,
+      materialsNeeded: this.state.materialsNeeded,
+
+    };
+    const { context } = this.props;
+    
+    console.log(course)
+    console.log(context)
+    // context.helper.createCourse(course, username, password)
+    //   .then()
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.props.history.push('/error')
+    //   })
   }
 
 }

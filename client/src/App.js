@@ -4,6 +4,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
 
 // Component Imports
 import Header from './components/Header';
@@ -15,19 +16,30 @@ import UserSignUp from './components/UserSignUp';
 import UserSignIn from './components/UserSignIn';
 import UserSignOut from './components/UserSignOut';
 
+// Context import and wrapping components
+import withContext from './Context';
+
+const HeaderWithContext = withContext(Header);
+const UserSignInWithContext = withContext(UserSignIn);
+const UserSignOutWithContext = withContext(UserSignOut);
+const UserSignUpWithContext = withContext(UserSignUp);
+const CreateCourseWithContext = withContext(CreateCourse);
+const CourseDetailWithContext = withContext(CourseDetail);
+
 function App() {
   return (
     <Router>
       <div>
-        <Header />
+        <HeaderWithContext />
+
         <Switch>
           <Route exact path="/" component={Courses} />
-          <Route path="/courses/create" component={CreateCourse} />
-          <Route path="/courses/:id" component={CourseDetail} />
-          <Route path="/courses/:id/update" component={UpdateCourse} />
-          <Route path="/signin" component={UserSignIn} />
-          <Route path="/signup" component={UserSignUp} />
-          <Route path="/signout" component={UserSignOut} />
+          <PrivateRoute path="/courses/create" component={CreateCourseWithContext} />
+          <Route path="/courses/:id" component={CourseDetailWithContext} />
+          <PrivateRoute path="/courses/:id/update" component={UpdateCourse} />
+          <Route path="/signin" component={UserSignInWithContext} />
+          <Route path="/signup" component={UserSignUpWithContext} />
+          <Route path="/signout" component={UserSignOutWithContext} />
 
         </Switch>
       </div>

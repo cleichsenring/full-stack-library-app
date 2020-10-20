@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
 
-import { APIHelper } from '../APIHelper';
-const helper = new APIHelper();
 
 export default class UserSignUp extends Component {
   state = {
@@ -91,7 +89,35 @@ export default class UserSignUp extends Component {
   }
 
   submit = () => {
+    const { context } = this.props;
 
+    if (this.state.password !== this.state.confirmPassword) {
+      console.log('Passwords dont match!');
+    } else {
+      // Create user payload
+      const user = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        emailAddress: this.state.emailAddress,
+        password: this.state.password,
+      }
+
+      // Create new user
+      context.helper.createUser(user)
+        .then(errors => {
+          if (errors.length) {
+            this.setState({ errors });
+          } else {
+            // If new user created successfully, sign user in and redirect to main page
+            context.actions.signIn(user.emailAddress, user.password)
+              .then(() => this.props.history.push('/'));
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.props.history.push('/error');
+        });
+    }
   }
 
   cancel = () => {
