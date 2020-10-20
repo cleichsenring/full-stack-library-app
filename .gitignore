@@ -26,3 +26,6 @@ yarn-error.log*
 #markup & mockups
 /markup
 /mockups
+
+
+api/fsjstd-restapi.db
