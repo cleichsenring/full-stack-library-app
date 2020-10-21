@@ -82,11 +82,11 @@ router.post('/users', asyncHandler(async (req, res) => {
     if (error.name === 'SequelizeValidationError') {
       const errors = error.errors.map( err => err.message );
       console.error('Validation errors: ', errors);
-      res.status(400).json({"Errors": errors});
+      res.status(400).json({"errors": errors});
 
       // Unique email constraint error catching
     } else if (error.name === 'SequelizeUniqueConstraintError') {
-      res.status(400).json({"Error": `User with email: ${req.body.emailAddress} already exists!`});
+      res.status(400).json({"errors": `User with email: ${req.body.emailAddress} already exists!`});
     } else {
       throw error;
     }
@@ -115,7 +115,7 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res, next) =>
     if (error.name === 'SequelizeValidationError') {
       const errors = error.errors.map( err => err.message );
       console.error('Validation errors: ', errors);
-      res.status(400).json({"Errors": errors});
+      res.status(400).json({"errors": errors});
     } else {
       throw error;
     }
@@ -133,7 +133,7 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
         if (error.name === 'SequelizeValidationError') {
           const errors = error.errors.map( err => err.message );
           console.error('Validation errors: ', errors);
-          res.status(400).json({"Errors": errors});
+          res.status(400).json({"errors": errors});
         } else {
           throw error;
         }
