@@ -7,7 +7,6 @@ const UnhandledError = () => {
       <h1>Error</h1>
       <p>An unexpected error has occurred.</p>
       <NavLink to={'/'} className="button button-secondary">Return to Courses</NavLink>
-
     </div>
   )
 }

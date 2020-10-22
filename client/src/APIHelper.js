@@ -26,10 +26,8 @@ export class APIHelper {
     }
     // Checks if auth is required and then encodes credentials in base64
     if (requiresAuth) {
-      //const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
       options.headers['Authorization']= `${token}`;
     }
-
     return fetch(url, options);
   }
 
@@ -38,7 +36,6 @@ export class APIHelper {
     if(response.status === 200) {
       return response.json().then(data => data)
     } else if (response.status === 401 ) {
-      //TODO error message if unauthorized
       return null;
     }
     else {
@@ -51,7 +48,6 @@ export class APIHelper {
   if (response.status === 201) {
     return [];
   } else if (response.status === 400) {
-    //Data validation errors. Need to test
     return response.json().then(data => {
       return data.errors;
     });
@@ -74,11 +70,7 @@ export class APIHelper {
     if (response.status === 200) {
       return response.json();
     } else if (response.status === 404) {
-      //Testing needed for 404 error. Redirect needed to error page
-      console.log('Course not found...', response.json())
-      return response.json().then(data => {
-        return data.errors;
-      });
+      return response.status;
     } else {
       throw new Error();
     }
@@ -89,7 +81,6 @@ export class APIHelper {
     if (response.status === 201) {
       return [];
     } else if (response.status === 400) {
-      //Validation testing needed
       return response.json().then(data => {
         return data.errors
       });
@@ -106,9 +97,7 @@ export class APIHelper {
       return response.json().then(data => {
         return data.errors
       });
-    } // TODO add 403 - forbidden catch 
-      // TODO add 404 - not found error catch
-    else {
+    } else {
       throw new Error();
     }
   }
@@ -121,9 +110,7 @@ export class APIHelper {
       return response.json().then(data => {
         return data.errors
       });
-    } // TODO add 403 - forbidden catch 
-      // TOD add 404 - not found catch
-    else {
+    } else {
       throw new Error();
     }
   }
