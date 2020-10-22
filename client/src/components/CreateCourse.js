@@ -45,10 +45,7 @@ export default class CreatCourse extends Component {
           this.setState({ errors: errors })
         }
       })
-      .catch(err => {
-        console.log(err);
-        this.props.history.push('/error')
-      });
+      .catch(() => this.props.history.push('/error'));
   }
 
   render() {

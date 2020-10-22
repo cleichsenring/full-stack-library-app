@@ -9,16 +9,20 @@ export default class CourseDetail extends Component {
 
   componentDidMount() {
     this.props.context.helper.getCourse(this.props.match.params.id)
-      .then(res => this.setState({course: res}))
+      .then(res => {
+        if (res === 404) {
+          this.props.history.push('/notfound');
+        } else {
+          this.setState({course: res});
+        }
+      })
+      .catch(() => this.props.history.push('/error'));
   }
 
   deleteCourse = () => {
     this.props.context.helper.deleteCourse(this.state.course.id, this.props.context.token)
       .then(this.props.history.push('/'))
-      .catch(err => {
-        console.log(err);
-        this.props.history.push('/error')
-      });
+      .catch(() => this.props.history.push('/error'));
   }
 
   render() {

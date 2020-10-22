@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Form from './Form';
 
 
-
 export default class UpdateCourse extends Component {
   state = {
     loading: true, 
@@ -14,11 +13,23 @@ export default class UpdateCourse extends Component {
   }
 
   componentDidMount() {
-    this.props.context.helper.getCourse(this.props.match.params.id)
-      .then(res => {
-        this.setState({...res})
-        this.setState({ loading: false })
-      })
+    const { context, match, history } = this.props;
+    console.log(context.authenticatedUser);
+    console.log(match.params)
+    if(context.authenticatedUser.id != match.params.id) {
+      history.push('/forbidden');
+    } else {
+      context.helper.getCourse(match.params.id)
+        .then(res => {
+          if (res === 404) {
+            history.push('/notfound');
+          } else {
+            this.setState({...res});
+            this.setState({ loading: false });
+          }
+        })
+        .catch(() => this.props.history.push('/error'));
+    }
   }
 
     // Updates state value when form is updated
@@ -56,10 +67,7 @@ export default class UpdateCourse extends Component {
             this.setState({ errors: errors })
           }
         })
-        .catch(err => {
-          console.log(err);
-          this.props.history.push('/error')
-        });
+        .catch(() => this.props.history.push('/error'));
     }
 
   render() {

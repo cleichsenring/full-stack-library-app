@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import  Course  from './Course';
 import { Link } from 'react-router-dom';
-// BUG TO FIX. AFTER DELETE COURSE NEED TO RERENDER
 
+// BUG TO FIX. AFTER DELETE COURSE NEED TO RERENDER
 export default class Courses extends Component {
   constructor() {
     super();
@@ -11,11 +11,10 @@ export default class Courses extends Component {
   componentDidMount() {
     this.props.context.helper.getCourses()
       .then(courses => this.setState({courses: courses }))
-      .catch(err => this.props.history.push('/error'));
+      .catch(() => this.props.history.push('/error'));
   }
 
   render() {
-
     let courseList;
     
     if(this.state.courses) {
@@ -36,7 +35,6 @@ export default class Courses extends Component {
           </Link>
         </div>
       </div>
-      
     );
   }
 }

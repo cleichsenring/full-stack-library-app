@@ -48,12 +48,11 @@ export default class UserSignUp extends Component {
           } else {
             // If new user created successfully, sign user in and redirect to main page
             context.actions.signIn(user.emailAddress, user.password)
-              .then(() => this.props.history.push('/'));
+              .then(() => this.props.history.push('/'))
+              .catch(() => this.props.history.push('/error'));
           }
         })
-        .catch(err => {
-          this.props.history.push('/error');
-        });
+        .catch(() => this.props.history.push('/error'));
     }
   }
 

@@ -8,7 +8,38 @@ export default class UserSignIn extends Component {
     password: '',
     errors: [],
   }
-  
+
+  change = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    this.setState(() => {
+      return { [name]: value };
+    });
+  }
+
+  submit = () => {
+    const { from } = this.props.location.state || {from: {pathname: '/'}};
+    const { emailAddress, password, } = this.state;
+    const { context } = this.props;
+    context.actions.signIn(emailAddress, password)
+      .then( user => {
+        if (user === null) {
+          this.setState(() => {
+            return { errors: ['Sign-in was unsuccessful'] };
+          });
+        } else {
+          this.props.history.push(from);
+          console.log('Sign in successful!');
+        }
+      })
+      .catch(() => this.props.history.push('/error'));
+  }
+
+  cancel = () => {
+    this.props.history.push('/');
+  }
+
   render() {
     const {
       emailAddress,
@@ -49,39 +80,5 @@ export default class UserSignIn extends Component {
         </div>
       </div>
     );
-  }
-
-  change = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    this.setState(() => {
-      return { [name]: value };
-    });
-  }
-
-  submit = () => {
-    const { from } = this.props.location.state || {from: {pathname: '/'}};
-    const { emailAddress, password, } = this.state;
-    const { context } = this.props;
-    context.actions.signIn(emailAddress, password)
-      .then( user => {
-        if (user === null) {
-          this.setState(() => {
-            return { errors: ['Sign-in was unsuccessful'] };
-          });
-        } else {
-          this.props.history.push(from);
-          console.log('Sign in successful!');
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.props.history.push('/error')
-      });
-  }
-
-  cancel = () => {
-    this.props.history.push('/');
   }
 }
