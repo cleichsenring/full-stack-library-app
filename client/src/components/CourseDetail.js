@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 
 export default class CourseDetail extends Component {
@@ -32,7 +33,6 @@ export default class CourseDetail extends Component {
         actions = 
           <span>
             <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-            {/* TODO Add delete method */}
             <button className="button" onClick={this.deleteCourse} >Delete Course</button>
           </span>
       }
@@ -55,7 +55,7 @@ export default class CourseDetail extends Component {
               <p>By {course.User.firstName} {course.User.lastName}</p>
             </div>
             <div className="course--description">
-              <p>{course.description}</p>
+              <ReactMarkdown>{course.description}</ReactMarkdown>
             </div>
           </div>
           <div className="grid-25 grid-right">
@@ -67,7 +67,7 @@ export default class CourseDetail extends Component {
                 </li>
                 <li className="course--stats--list--item">
                   <h4>Materials Needed</h4>
-                    <p>{course.materialsNeeded}</p>
+                    <ReactMarkdown>{course.materialsNeeded}</ReactMarkdown>
                 </li>
               </ul>
             </div>
