@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {APIHelper} from './APIHelper';
+import { APIHelper } from './APIHelper';
 import Cookies from 'js-cookie';
 
 const Context = React.createContext();
@@ -11,14 +11,15 @@ export class Provider extends Component {
   }
 
   state = {
-    authenticatedUser: Cookies.getJSON('authenticatedUser') || null
+    authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
+    token: Cookies.getJSON('token') || null,
   }
 
   render() {
-    const { authenticatedUser } = this.state;
-
+    const { authenticatedUser, token } = this.state;
     const value = {
       authenticatedUser,
+      token,
       helper: this.helper,
       actions: {
         signIn: this.signIn,
@@ -35,26 +36,36 @@ export class Provider extends Component {
 
   //Context actions
   signIn = async (emailAddress, password) => {
-    const user = await this.helper.getUser(emailAddress, password);
+    // Generate credential token for future auth calls
+    const encodedCredentials = btoa(`${emailAddress}:${password}`);
+    const token = `Basic ${encodedCredentials}`
+    
+    const user = await this.helper.getUser(token);
     if (user !== null) {
-      console.log(user)
       this.setState(() => {
-        return { authenticatedUser: {user,password} }
+        return { authenticatedUser: user, token }
       });
-      console.log(this.state.authenticatedUser)
+
+      // Set cookies for future calls
       Cookies.set('authenticatedUser', JSON.stringify(user),{ expires: 1 });
+      Cookies.set('token', JSON.stringify(token), { expires: 1 });
     }
     return user;
   }
   signOut = () => {
-    this.setState({ authenticatedUser: null });
-    console.log('I sign out now!');
-    Cookies.remove('authenticatedUser')
+    this.setState({ 
+      authenticatedUser: null,
+      token: null,
+   });
+    Cookies.remove('authenticatedUser');
+    Cookies.remove('token');
+    console.log('Cookies cleared');
   }
 }
 
 export const Consumer = Context.Consumer;
 
+// Context wrapper. Used to provide context to wrapped components
 export default function withContext(Component) {
   return function ContextComponent(props) {
     return (

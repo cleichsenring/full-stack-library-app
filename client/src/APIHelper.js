@@ -11,7 +11,7 @@ export class APIHelper {
    * @param {BOOL} [requiresAuth] - Specifies if authorization is required
    * @param {*} [credentials] - User credentials for auth
    */
-  api(path, method = 'GET', body = null, requiresAuth = null, credentials = null) {
+  api(path, method = 'GET', body = null, requiresAuth = null, token) {
     const url = API_URL + path;
     
     const options = {
@@ -26,15 +26,15 @@ export class APIHelper {
     }
     // Checks if auth is required and then encodes credentials in base64
     if (requiresAuth) {
-      const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
-      options.headers['Authorization']= `Basic ${encodedCredentials}`;
+      //const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
+      options.headers['Authorization']= `${token}`;
     }
 
     return fetch(url, options);
   }
 
-  async getUser(username,password) {
-    const response = await this.api('/users', 'GET', null, true, { username, password });
+  async getUser(token) {
+    const response = await this.api('/users', 'GET', null, true, token);
     if(response.status === 200) {
       return response.json().then(data => data)
     } else if (response.status === 401 ) {
@@ -84,8 +84,8 @@ export class APIHelper {
     }
   }
   
-  async createCourse(course, username, password) {
-    const response = await this.api('/courses', 'POST', course, true, {username, password});
+  async createCourse(course, token) {
+    const response = await this.api('/courses', 'POST', course, true, token);
     if (response.status === 201) {
       return [];
     } else if (response.status === 400) {
@@ -98,8 +98,8 @@ export class APIHelper {
     }
   }
 
-  async updateCourse(id, course, username, password) {
-    const response = await this.api(`/courses/${id}`, 'PUT', course, true, {username, password});
+  async updateCourse(id, course, token) {
+    const response = await this.api(`/courses/${id}`, 'PUT', course, true, token);
     if (response.status === 204) {
       return [];
     } else if (response.status === 400){
@@ -113,8 +113,8 @@ export class APIHelper {
     }
   }
 
-  async deleteCourse(id, username, password) {
-    const response = await this.api(`/courses/${id}`, 'DELETE', null, true, {username, password});
+  async deleteCourse(id, token) {
+    const response = await this.api(`/courses/${id}`, 'DELETE', null, true, token);
     if (response.status === 204) {
       return [];
     } else if (response.status === 400){
