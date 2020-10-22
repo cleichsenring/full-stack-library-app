@@ -32,6 +32,7 @@ export default class CourseDetail extends Component {
     const { course } = this.state;
     const { id } = this.props.match.params;
     const authUser = this.props.context.authenticatedUser;
+    // Only render Update & Delete buttons if user is authenticated and owns the rendered course
     let actions;
       if(authUser && course.userId === authUser.id) {
         actions = 

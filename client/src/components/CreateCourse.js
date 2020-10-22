@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Form from './Form';
+import { Form } from './Form';
 
 export default class CreatCourse extends Component {
   state = {
@@ -25,7 +25,6 @@ export default class CreatCourse extends Component {
   }
 
   submit = () => {
-    
     const { context } = this.props;
     // Build course payload
     const course = {

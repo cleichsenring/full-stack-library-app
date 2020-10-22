@@ -16,7 +16,7 @@ export default class Courses extends Component {
 
   render() {
     let courseList;
-    
+    // Check if courses exist and map individual courses to components
     if(this.state.courses) {
       courseList = this.state.courses.map(course => <Course id={course.id} title={course.title} key={course.id} />);
     }

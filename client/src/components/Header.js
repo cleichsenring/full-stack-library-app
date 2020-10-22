@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 
-
 const Header = ({ context }) => {
   const authUser = context.authenticatedUser;
   
@@ -25,7 +24,6 @@ const Header = ({ context }) => {
       </div>
     </div>
   )
-
 }
 
 export default Header;
