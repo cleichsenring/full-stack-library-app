@@ -61,8 +61,7 @@ export default class UserSignIn extends Component {
   }
 
   submit = () => {
-    // TODO - fix FROM
-    const { from } = this.props.location.state || {from: {pathname: '/'}}
+    const { from } = this.props.location.state || {from: {pathname: '/'}};
     const { emailAddress, password, } = this.state;
     const { context } = this.props;
     context.actions.signIn(emailAddress, password)
