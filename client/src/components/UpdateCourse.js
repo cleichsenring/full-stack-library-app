@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Form from './Form';
+import { Form } from './Form';
 
 
 export default class UpdateCourse extends Component {
@@ -14,22 +14,19 @@ export default class UpdateCourse extends Component {
 
   componentDidMount() {
     const { context, match, history } = this.props;
-    console.log(context.authenticatedUser);
-    console.log(match.params)
-    if(context.authenticatedUser.id != match.params.id) {
-      history.push('/forbidden');
-    } else {
-      context.helper.getCourse(match.params.id)
-        .then(res => {
-          if (res === 404) {
-            history.push('/notfound');
-          } else {
-            this.setState({...res});
-            this.setState({ loading: false });
-          }
-        })
-        .catch(() => this.props.history.push('/error'));
-    }
+    context.helper.getCourse(match.params.id)
+    .then(res => {
+      if (res === 404) {
+        history.push('/notfound');
+      } // Check if authUser owns the requested course to update
+        else if (context.authenticatedUser.id !== res.userId) { 
+          history.push('/forbidden');
+        } else {
+          this.setState({...res});
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => this.props.history.push('/error'));
   }
 
     // Updates state value when form is updated
@@ -47,7 +44,6 @@ export default class UpdateCourse extends Component {
     }
   
     submit = () => {
-      
       const { context } = this.props;
       // Build course payload
       const course = {
@@ -61,7 +57,6 @@ export default class UpdateCourse extends Component {
       context.helper.updateCourse(this.state.id, course, context.token)
         .then(errors => {
           if(!errors.length) {
-            // TODO. Read location header from response and update history
             this.props.history.push(`/courses/${this.state.id}`)
           } else {
             this.setState({ errors: errors })
