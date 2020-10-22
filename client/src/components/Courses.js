@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import  Course  from './Course';
 import { Link } from 'react-router-dom';
-import { APIHelper } from '../APIHelper'
-
-const helper = new APIHelper();
+// BUG TO FIX. AFTER DELETE COURSE NEED TO RERENDER
 
 export default class Courses extends Component {
   constructor() {
@@ -11,7 +9,7 @@ export default class Courses extends Component {
     this.state = { courses: null }
   }  
   componentDidMount() {
-    helper.getCourses()
+    this.props.context.helper.getCourses()
       .then(courses => this.setState({courses: courses }))
       .catch(err => this.props.history.push('/error'));
   }
