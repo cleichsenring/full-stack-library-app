@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { APIHelper } from '../APIHelper';
-const helper = new APIHelper();
-
 
 export default class CourseDetail extends Component {
-   state = { course: null }
+ 
+  state = { course: null }
 
   componentDidMount() {
-    helper.getCourse(this.props.match.params.id).then(res => this.setState({course: res}))
+    this.props.context.helper.getCourse(this.props.match.params.id)
+      .then(res => this.setState({course: res}))
   }
 
-  deleteCourse() {
-    //TODO fix this
-    helper.deleteCourse()
+  deleteCourse = () => {
+    this.props.context.helper.deleteCourse(this.state.course.id, this.props.context.token)
       .then(this.props.history.push('/'))
-      .catch(this.props.history.push('/error'))
+      .catch(err => {
+        console.log(err);
+        this.props.history.push('/error')
+      });
   }
 
   render() {
@@ -25,18 +26,24 @@ export default class CourseDetail extends Component {
     }
     const { course } = this.state;
     const { id } = this.props.match.params;
+    const authUser = this.props.context.authenticatedUser;
+    let actions;
+      if(authUser && course.userId === authUser.id) {
+        actions = 
+          <span>
+            <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
+            {/* TODO Add delete method */}
+            <button className="button" onClick={this.deleteCourse} >Delete Course</button>
+          </span>
+      }
     
     return (
       <div>
         <div className="actions--bar">
           <div className="bounds">
             <div className="grid-100">
-              <span>
-                <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-                {/* TODO Add delete method */}
-                <button className="button" onClick={this.deleteCourse} >Delete Course</button>
-              </span>
-                <Link className="button button-secondary" to="/">Return to List</Link>
+              {actions}
+              <Link className="button button-secondary" to="/">Return to List</Link>
             </div>
           </div>
         </div>

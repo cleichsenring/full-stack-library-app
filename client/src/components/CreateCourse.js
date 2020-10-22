@@ -10,6 +10,47 @@ export default class CreatCourse extends Component {
     errors: []
   }
 
+  // Updates state value when form is updated
+  change = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    this.setState(() => {
+      return { [name]: value };
+    });
+  }
+
+  cancel = () => {
+    this.props.history.push('/');
+  }
+
+  submit = () => {
+    
+    const { context } = this.props;
+    // Build course payload
+    const course = {
+      title: this.state.title,
+      description: this.state.description,
+      estimatedTime: this.state.estimatedTime,
+      materialsNeeded: this.state.materialsNeeded,
+      userId: context.authenticatedUser.id
+    };
+    
+    context.helper.createCourse(course, context.token)
+      .then(errors => {
+        if(!errors.length) {
+          // TODO. Read location header from response and update history
+          this.props.history.push(`/`)
+        } else {
+          this.setState({ errors: errors })
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        this.props.history.push('/error')
+      });
+  }
+
   render() {
     const {
       title,
@@ -88,40 +129,4 @@ export default class CreatCourse extends Component {
       </div>
     );
   }
-
-  change = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    this.setState(() => {
-      return { [name]: value };
-    });
-  }
-
-  cancel = () => {
-    this.props.history.push('/');
-  }
-
-  submit = () => {
-    
-    
-    const course = {
-      title: this.state.title,
-      description: this.state.description,
-      estimatedTime: this.state.estimatedTime,
-      materialsNeeded: this.state.materialsNeeded,
-
-    };
-    const { context } = this.props;
-    
-    console.log(course)
-    console.log(context)
-    // context.helper.createCourse(course, username, password)
-    //   .then()
-    //   .catch(err => {
-    //     console.log(err);
-    //     this.props.history.push('/error')
-    //   })
-  }
-
 }
