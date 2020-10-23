@@ -37,20 +37,20 @@ export const Form = (props) => {
  * @param {array} errors - Array of validation errors
  * @returns if validation errors exist returns UL list containing errors 
  */
-const ErrorDisplay = ({ errors }) => {
+function ErrorDisplay({ errors }) {
+  let errorDisplay = null;
 
   if (errors.length) {
-    return (
-      <React.Fragment>
+    errorDisplay = (
+      <div>
         <h2 className="validation--errors--label">Validation errors:</h2>
         <div className="validation-errors">
           <ul>
             {errors.map((error, index) => <li key={index}>{error}</li>)}
           </ul>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
-
-  return ErrorDisplay;
+  return errorDisplay;
 }
