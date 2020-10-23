@@ -9,6 +9,7 @@ const Header = ({ context }) => {
       <div className="bounds">
         <Link to="/"><h1 className="header--logo">Courses</h1></Link>
         <nav>
+          {/* If user signed in show name and sign out button. Otherwise show Sign In & Sign Out buttons */}
           {authUser ?
             <React.Fragment>
               <span>Welcome {authUser.firstName} {authUser.lastName}!</span>

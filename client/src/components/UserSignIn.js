@@ -9,6 +9,7 @@ export default class UserSignIn extends Component {
     errors: [],
   }
 
+    // Updates state value when form is updated
   change = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -22,6 +23,7 @@ export default class UserSignIn extends Component {
     const { from } = this.props.location.state || {from: {pathname: '/'}};
     const { emailAddress, password, } = this.state;
     const { context } = this.props;
+    // Attempt to get user from DB
     context.actions.signIn(emailAddress, password)
       .then( user => {
         if (user === null) {
@@ -29,6 +31,7 @@ export default class UserSignIn extends Component {
             return { errors: ['Sign-in was unsuccessful'] };
           });
         } else {
+          // If user signs in successfully redirect back to path that they came from
           this.props.history.push(from);
           console.log('Sign in successful!');
         }

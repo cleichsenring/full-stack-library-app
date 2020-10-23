@@ -30,7 +30,7 @@ export default class CourseDetail extends Component {
       })
       .catch(() => this.props.history.push('/error'));
   }
-
+  // Conditional redirect to index route. Only returned after the deleted state is set to TRUE in deleteCourse().
   deleteCourseRedirect = () => { 
     if (this.state.deleted) {
       return <Redirect to="/" />

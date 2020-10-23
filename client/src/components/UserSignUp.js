@@ -13,6 +13,7 @@ export default class UserSignUp extends Component {
     errors: [],
   }
   
+  // Updates state value when form is updated
   change = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -25,6 +26,7 @@ export default class UserSignUp extends Component {
   submit = () => {
     const { context } = this.props;
 
+    // Verify that password and confirm password match before attempting to create user
     if (this.state.password !== this.state.confirmPassword) {
       this.setState(() => {
         return {errors: ['Password must match!']}
@@ -38,7 +40,7 @@ export default class UserSignUp extends Component {
         password: this.state.password,
       }
 
-      // Create new user
+      // Create new user in DB
       context.helper.createUser(user)
         .then(errors => {
           if (errors.length) {

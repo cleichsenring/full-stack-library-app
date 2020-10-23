@@ -24,6 +24,7 @@ export default class CreatCourse extends Component {
     this.props.history.push('/');
   }
 
+  // New course creation method. Builds course object and then attempts to create. 
   submit = () => {
     const { context } = this.props;
     // Build course payload

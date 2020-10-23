@@ -14,6 +14,7 @@ export default class UpdateCourse extends Component {
 
   componentDidMount() {
     const { context, match, history } = this.props;
+    // Fetch course to be updated
     context.helper.getCourse(match.params.id)
     .then(res => {
       if (res === 404) {
@@ -43,6 +44,7 @@ export default class UpdateCourse extends Component {
       this.props.history.push('/');
     }
   
+    // Create updated course payload and attempt to POST
     submit = () => {
       const { context } = this.props;
       // Build course payload

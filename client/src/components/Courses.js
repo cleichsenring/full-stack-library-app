@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import  Course  from './Course';
 import { Link } from 'react-router-dom';
 
-// BUG TO FIX. AFTER DELETE COURSE NEED TO RERENDER
+
 export default class Courses extends Component {
   constructor() {
     super();
     this.state = { courses: null }
   }  
+
   componentDidMount() {
+    // Retrieve all courses
     this.props.context.helper.getCourses()
       .then(courses => this.setState({courses: courses }))
       .catch(() => this.props.history.push('/error'));
