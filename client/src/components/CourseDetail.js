@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 
 export default class CourseDetail extends Component {
  
-  state = { course: null }
+  state = { 
+    course: null, 
+    deleted: false,
+  }
 
   componentDidMount() {
     this.props.context.helper.getCourse(this.props.match.params.id)
@@ -13,7 +16,7 @@ export default class CourseDetail extends Component {
         if (res === 404) {
           this.props.history.push('/notfound');
         } else {
-          this.setState({course: res});
+          this.setState({course: res, deleted:false });
         }
       })
       .catch(() => this.props.history.push('/error'));
@@ -21,8 +24,17 @@ export default class CourseDetail extends Component {
 
   deleteCourse = () => {
     this.props.context.helper.deleteCourse(this.state.course.id, this.props.context.token)
-      .then(this.props.history.push('/'))
+      .then(() => { 
+        // set deleted state to trigger deleteCourseRedirect()
+        this.setState({ deleted: true });
+      })
       .catch(() => this.props.history.push('/error'));
+  }
+
+  deleteCourseRedirect = () => { 
+    if (this.state.deleted) {
+      return <Redirect to="/" />
+    }
   }
 
   render() {
@@ -38,6 +50,7 @@ export default class CourseDetail extends Component {
         actions = 
           <span>
             <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
+            { this.deleteCourseRedirect() }
             <button className="button" onClick={this.deleteCourse} >Delete Course</button>
           </span>
       }
