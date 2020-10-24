@@ -41,7 +41,7 @@ export default class UpdateCourse extends Component {
     }
   
     cancel = () => {
-      this.props.history.push('/');
+      this.props.history.push(`/courses/${this.props.match.params.id}`);
     }
   
     // Create updated course payload and attempt to POST
@@ -87,7 +87,7 @@ export default class UpdateCourse extends Component {
           cancel={this.cancel}
           errors={errors}
           submit={this.submit}
-          submitButtonText="Create Course"
+          submitButtonText="Update Course"
           elements={() => (
             <React.Fragment>
               <div className="grid-66">
